@@ -1,15 +1,18 @@
-version: '3'
+version: '3.1'
+
+networks:
+  backend-net:
 
 volumes:
-  local_postgres_data: {}
-  local_postgres_data_backups: {}
+  local_postgres_data_1: {}
+  local_postgres_data_backups_1: {}
 
 services:
   django: &django
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
-    image: cride_local_django
+    image: local_django
     depends_on:
       - postgres
     volumes:
@@ -20,20 +23,28 @@ services:
     ports:
       - "8000:8000"
     command: /start
+    networks:
+      - backend-net
 
   postgres:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: cride_production_postgres
+    image: postgres-database
+    ports:
+      - "5434:5432"
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data
-      - local_postgres_data_backups:/backups
+      - local_postgres_data_1:/var/lib/postgresql/data
+      - local_postgres_data_backups_1:/backups
     env_file:
       - ./.envs/.local/.postgres
+    networks:
+      - backend-net
 
   redis:
     image: redis:3.2
+    networks:
+      - backend-net
 
   celeryworker:
     <<: *django
@@ -44,6 +55,8 @@ services:
       
     ports: []
     command: /start-celeryworker
+    networks:
+      - backend-net
 
   celerybeat:
     <<: *django
@@ -54,6 +67,8 @@ services:
       
     ports: []
     command: /start-celerybeat
+    networks:
+      - backend-net
 
   flower:
     <<: *django
@@ -61,3 +76,9 @@ services:
     ports:
       - "5555:5555"
     command: /start-flower
+    networks:
+      - backend-net
+
+networks:
+  backend-net:
+    driver: bridge
