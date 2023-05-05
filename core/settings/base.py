@@ -4,6 +4,8 @@ import os
 import environ
 import psycopg2.extensions
 from corsheaders.defaults import default_headers
+from channels.routing import ProtocolTypeRouter
+from django.core.asgi import get_asgi_application
 
 # instanciamos objeto para lectura de variables de entorno
 env = environ.Env()
@@ -30,6 +32,7 @@ else:
 # Application definition
 
 DJANGO_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,12 +43,13 @@ DJANGO_APPS = [
 
 
 THIRD_APPS = [
+    'channels',
     'corsheaders',
     'rest_framework',
     'ckeditor',
     'ckeditor_uploader',
     'drf_yasg',  # swagger
-    'storages',
+    # 'storages',
     'rest_framework.authtoken',
     'social.apps.django_app.default',
     'social_django',
@@ -109,43 +113,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.environ.get('DATABASE_NAME'),
-#         'USER': os.environ.get('DATABASE_USER'),
-#         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-#         'HOST': os.environ.get('DATABASE_HOST'),
-#         'PORT': os.environ.get('DATABASE_PORT'),
-#     }
-# }
-
-
-POSTGRES_HOST = 'localhost'
-POSTGRES_PORT = 5434
-POSTGRES_DB = 'cride'
-POSTGRES_USER = 'sBLRWyyPsInwHftmHAWmYJURGWBGFpLs'
-POSTGRES_PASSWORD = 'tuXL3XSF8O7tsGrcGHoMos4tVNtL3tnrRshSCZokGnIfk4ArDyzaa297k2WgQPSL'
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': POSTGRES_DB,
-        'USER': POSTGRES_USER,
-        'PASSWORD': POSTGRES_PASSWORD,
-        'HOST': 5432,
-        'PORT': POSTGRES_PORT,
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
 
-print(DATABASES)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:8000',
@@ -309,3 +288,18 @@ if not DEBUG:
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'core.storage_backends.MediaStore'
+
+
+# django channels settings
+ASGI_APPLICATION = 'core.asgi.application'
+
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {'hosts': [('localhost', 6379)]},
+#     },
+# }
+
+
+
+

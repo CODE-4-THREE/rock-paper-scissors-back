@@ -30,9 +30,11 @@ SECURE_SSL_REDIRECT = env.bool('DJANGO_SECURE_SSL_REDIRECT', default=True)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 60
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool('DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+    'DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
 SECURE_HSTS_PRELOAD = env.bool('DJANGO_SECURE_HSTS_PRELOAD', default=True)
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool('DJANGO_SECURE_CONTENT_TYPE_NOSNIFF', default=True)
+SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
+    'DJANGO_SECURE_CONTENT_TYPE_NOSNIFF', default=True)
 
 # Storages
 INSTALLED_APPS += ['storages']  # noqa F405
@@ -53,10 +55,10 @@ MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/'
 # Templates
 TEMPLATES[0]['OPTIONS']['loaders'] = [  # noqa F405
     (
-        'django.template.loaders.cached.Loader',
+        'django.core.loaders.cached.Loader',
         [
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
+            'django.core.loaders.filesystem.Loader',
+            'django.core.loaders.app_directories.Loader',
         ]
     ),
 ]
@@ -67,7 +69,8 @@ DEFAULT_FROM_EMAIL = env(
     default='Comparte Ride <noreply@comparteride.com>'
 )
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
-EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[Comparte Ride]')
+EMAIL_SUBJECT_PREFIX = env(
+    'DJANGO_EMAIL_SUBJECT_PREFIX', default='[Comparte Ride]')
 
 # Admin
 ADMIN_URL = env('DJANGO_ADMIN_URL')

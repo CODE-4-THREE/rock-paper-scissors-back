@@ -1,4 +1,4 @@
-"""Development settings."""
+# """Development settings."""
 
 from .base import *  # NOQA
 from .base import env
