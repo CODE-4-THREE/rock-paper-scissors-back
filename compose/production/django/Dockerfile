@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.11.4-alpine3.18
 
 ENV PYTHONUNBUFFERED 1
 
@@ -14,10 +14,11 @@ RUN apk update \
 RUN addgroup -S django \
     && adduser -S -G django django
 
+COPY . /app
 # Requirements are installed here to ensure they will be cached.
-COPY ./requirements /requirements
-RUN pip install --no-cache-dir -r /requirements/production.txt \
-    && rm -rf /requirements
+RUN pip install -r ./requirements/production.txt
+
+RUN pip install -U channels["daphne"]
 
 COPY ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r//' /entrypoint
@@ -43,7 +44,7 @@ COPY ./compose/production/django/celery/flower/start /start-flower
 RUN sed -i 's/\r//' /start-flower
 RUN chmod +x /start-flower
 
-COPY . /app
+
 
 RUN chown -R django /app
 

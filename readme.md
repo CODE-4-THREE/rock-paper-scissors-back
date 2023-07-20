@@ -34,7 +34,7 @@ Antes de comenzar a utilizar este proyecto, asegúrese de tener instalado lo sig
     ├── requirements.txt (requirements for Django)
     ├── docker-compose-dev.yml (docker-compose file for development)
     ├── docker-compose-prod.yml (docker-compose file for production)
-    
+
 ```
 
 ## Configuración del proyecto
@@ -74,7 +74,7 @@ docker-compose -f docker-compose-dev.yml exec -it django_container_name python m
 Para **detener** los contenedores de Docker, ejecute el siguiente comando:
 
 ```
-docker-compose -f docker-compose-dev.yml build down
+docker-compose -f docker-compose-dev.yml down
 ```
 
 
