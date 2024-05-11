@@ -58,9 +58,19 @@ THIRD_APPS = [
     'django_extensions',  # for django shell_plus
 ]
 
-PROJECT_APPS = [
+# PROJECT_APPS = [
+#     'apps.rps_sockets',
+# ]
 
-]
+# Obtiene la ruta completa de la carpeta "apps"
+apps_dir = os.path.join(BASE_DIR.parent, 'apps')
+
+# Obtiene una lista de nombres de las aplicaciones dentro de la carpeta "apps"
+PROJECT_APPS = [f"apps.{name}" for name in os.listdir(
+    apps_dir) if os.path.isdir(os.path.join(apps_dir, name))]
+
+
+ASGI_APPLICATION = 'apps.rps_sockets.routing.application'
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_APPS + PROJECT_APPS
 
@@ -299,7 +309,3 @@ ASGI_APPLICATION = 'core.asgi.application'
 #         'CONFIG': {'hosts': [('localhost', 6379)]},
 #     },
 # }
-
-
-
-
